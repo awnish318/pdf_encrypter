@@ -1,0 +1,93 @@
+package com.example.wall;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.app.WallpaperManager;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import java.io.IOException;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button btn ;
+    boolean running;
+
+    int[] ia = new int[]{R.drawable.images, R.drawable.a, R.drawable.images, R.drawable.a, R.drawable.images};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btn = (Button)findViewById(R.id.button);
+        btn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if( !running )
+        {
+            new Timer().schedule(new myTimer(), 0, 3000);
+            running = true;
+        }
+    }
+
+    private class myTimer extends TimerTask {
+        @Override
+        public void run()
+        {
+            try
+            {
+                WallpaperManager wallpaperManager = WallpaperManager.getInstance(getBaseContext());
+
+                Random random = new Random();
+
+                wallpaperManager.setBitmap(BitmapFactory.decodeResource(getResources(), ia[random.nextInt(5)]));
+            } catch (IOException e) {
+
+            }
+        }
+
+    }
+}
+
+///xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="changing wallpaper"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.091" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="172dp"
+        android:text="change wallpaper"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+manifest change
+ <uses-permission android:name="android.permission.SET_WALLPAPER" />
